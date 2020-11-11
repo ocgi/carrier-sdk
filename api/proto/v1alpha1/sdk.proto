@@ -1,0 +1,153 @@
+// Copyright 2021 The OCGI Authors.
+// Copyright 2018 Google LLC All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package carrier.dev.sdk;
+
+option go_package = ".;api";
+
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+
+// SDK service to be used in the GameServer SDK to the Pod Sidecar
+service SDK {
+
+    // Retrieve the current GameServer data
+    rpc GetGameServer (Empty) returns (GameServer) {
+        option (google.api.http) = {
+            get: "/gameserver"
+        };
+    }
+
+    // Send GameServer details whenever the GameServer is updated
+    rpc WatchGameServer (Empty) returns (stream GameServer) {
+        option (google.api.http) = {
+            get: "/watch/gameserver"
+        };
+    }
+
+    // Apply a Label to the backing GameServer metadata
+    rpc SetLabel(KeyValue) returns (Empty) {
+        option (google.api.http) = {
+            put: "/metadata/label"
+            body: "*"
+        };
+    }
+
+    // Apply a Annotation to the backing GameServer metadata
+    rpc SetAnnotation(KeyValue) returns (Empty) {
+        option (google.api.http) = {
+            put: "/metadata/annotation"
+            body: "*"
+        };
+    }
+
+    // Apply a condition to the backing GameServer condition
+    rpc SetCondition(KeyValue) returns (Empty) {
+        option (google.api.http) = {
+            put: "/condition"
+            body: "*"
+        };
+    }
+}
+
+// I am Empty
+message Empty {
+}
+
+message BoolValue {
+    bool value = 1;
+}
+
+// Key, Value entry
+message KeyValue {
+    string key = 1;
+    string value = 2;
+}
+
+// time duration, in seconds
+message Duration {
+    int64 seconds = 1;
+}
+
+// A GameServer Custom Resource Definition object
+// We will only export those resources that make the most
+// sense. Can always expand to more as needed.
+message GameServer {
+    ObjectMeta object_meta = 1;
+    Spec spec = 2;
+    Status status = 3;
+
+    // representation of the K8s ObjectMeta resource
+    message ObjectMeta {
+        string name = 1;
+        string namespace = 2;
+        string uid = 3;
+        string resource_version = 4;
+        int64 generation = 5;
+        // timestamp is in Epoch format, unit: seconds
+        int64 creation_timestamp = 6;
+        // optional deletion timestamp in Epoch format, unit: seconds
+        int64 deletion_timestamp = 7;
+        map<string, string> annotations = 8;
+        map<string, string> labels = 9;
+    }
+
+    message Spec {
+        repeated Constraint constraints = 1;
+        repeated string readiness_gates = 2;
+        repeated string deletable_gates = 3;
+
+        message Constraint {
+            string type = 1;
+            bool effective = 2;
+            string message = 3;
+            // optional deletion timestamp in Epoch format, unit: seconds
+            int64 timeAdded = 4;
+        }
+    }
+
+    message Status {
+        message LoadBalancerStatus {
+            repeated LoadBalancerIngress ingress = 1;
+
+            message LoadBalancerIngress {
+                string ip = 1;
+                repeated LoadBalancerPort ports = 2;
+
+                message LoadBalancerPort {
+                    // protoc v3.13 has support optional field,
+                    // but grpc-gateway not support optional current.
+                    // see https://github.com/grpc-ecosystem/grpc-gateway/issues/1278.
+                    google.protobuf.Int32Value container_port = 1;
+                    google.protobuf.Int32Value external_port = 2;
+                    PortRange container_port_range = 3;
+                    PortRange external_port_range = 4;
+                    string protocal = 5;
+                    message PortRange {
+                        int32 minPort = 1;
+                        int32 maxPort = 2;
+                    }
+                }
+            }
+        }
+
+        string state = 1;
+        string address = 2;
+        string nodeName = 3;
+        LoadBalancerStatus load_balancer_status = 4;
+    }
+}

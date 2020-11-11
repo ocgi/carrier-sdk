@@ -1,0 +1,10 @@
+OCGI
+Copyright 2020-2021 The OCGI Authors.
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+OCGI reused the codes from the agones project to implement the SDK server and API.
+
+This product includes software from the agones project (Apache 2.0)
+https://github.com/googleforgames/agones

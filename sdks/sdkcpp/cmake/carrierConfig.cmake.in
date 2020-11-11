@@ -1,0 +1,11 @@
+@PACKAGE_INIT@
+
+find_package(gRPC 1.33 REQUIRED)
+
+set(CARRIER_INCLUDE_DIRS "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/@CMAKE_PROJECT_NAME@")
+
+get_filename_component(_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include("${_dir}/@CMAKE_PROJECT_NAME@_static.cmake")
+include("${_dir}/@CMAKE_PROJECT_NAME@_share.cmake")
+set(CARRIER_LIBRARIES @CMAKE_PROJECT_NAME@ gRPC::grpc++)
+set(CARRIER_FOUND TRUE)

@@ -1,0 +1,33 @@
+apiVersion: carrier.ocgi.dev/v1alpha1
+kind: WebhookConfiguration
+metadata:
+  name: test
+  namespace: default
+webhooks:
+  - clientConfig:
+      url: http://123.test.com/ready
+    name: test-ready
+    type: ReadinessWebhook
+---
+apiVersion: carrier.ocgi.dev/v1alpha1
+kind: GameServer
+metadata:
+  annotations:
+    carrier.ocgi.dev/webhook-config-name: test # should be the webhook name
+  name: test
+  namespace: default
+spec:
+  health:
+    disabled: true
+  ports:
+  readinessGates:
+    - test-ready # readiness gate name should be same as the readiness gate name in webhook
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+        - image: hub.oa.com/dbyin/gameapp-example:v1
+          name: server
+          resources: {}
+      serviceAccountName: carrier-sdk
