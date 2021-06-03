@@ -115,7 +115,7 @@ message GameServer {
             string type = 1;
             bool effective = 2;
             string message = 3;
-            // optional deletion timestamp in Epoch format, unit: seconds
+            // optional time added timestamp in Epoch format, unit: seconds
             int64 timeAdded = 4;
         }
     }

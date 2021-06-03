@@ -137,7 +137,6 @@ func (c *Controller) Run(stop <-chan struct{}) error {
 	if err = c.sendWebhookRequests(gs, c.setCondition); err != nil {
 		return err
 	}
-	klog.V(5).Infof("Setting LogLevel configuration logLevel %v", "debug")
 	<-stop
 	return nil
 }
