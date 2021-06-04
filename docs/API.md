@@ -1,9 +1,5 @@
 # SDK API (v1alpha1)
 
-## Health (Empty)
-
-This sends a single ping to designate that the Game Server is alive and healthy. Failure to send pings within the configured thresholds will result in the GameServer being marked as `Unhealthy`.
-
 ## GetGameServer (Empty)
 
 This returns most of the backing GameServer configuration and Status. This can be useful for instances where you may want to know Health check configuration, or the IP and Port the GameServer is currently allocated to.

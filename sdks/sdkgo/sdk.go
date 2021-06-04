@@ -59,7 +59,7 @@ func NewSDK() (*SDK, error) {
 		return s, errors.Wrapf(err, "could not connect to %s", addr)
 	}
 	s.client = sdk.NewSDKClient(conn)
-	return s, errors.Wrap(err, "could not set up health check")
+	return s, nil
 }
 
 // SetLabel sets a metadata label on the `GameServer` with the prefix
