@@ -60,15 +60,3 @@ Example:
 ```shell
 # curl -X PUT "http://localhost:9021/condition" -H "accept: application/json" -H "Content-Type: application/json" -d '{"key": "carrier.ocgi.dev/server-ready", "value": "True"}'
 ```
-
-* Health
-
-```
-POST /health
-```
-
-Example:
-
-```shell
-# curl -X POST "http://localhost:9021/health"
-```

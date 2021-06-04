@@ -50,8 +50,6 @@ metadata:
   name: ds-server
   namespace: default
 spec:
-  health:
-    disabled: true # don't access SDK-Server
   readinessGates:
     - server-ready # readiness gate name should be same as the readiness gate name in webhook
 ```
