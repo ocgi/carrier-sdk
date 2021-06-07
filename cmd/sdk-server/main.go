@@ -59,8 +59,10 @@ func init() {
 	flag.StringVar(&address, "address", "127.0.0.1", `The Address to bind the server grpcPort to.`)
 	flag.IntVar(&grpcPort, "grpc-port", 9020, `Port on which to bind the gRPC server.`)
 	flag.IntVar(&httpPort, "http-port", 9021, `Port on which to bind the HTTP server.`)
-	flag.Float64Var(&kubeApiQps, "kube-api-qps", 5.0, `QPS limit when making requests to Kubernetes apiserver`)
-	flag.IntVar(&kubeApiBurst, "kube-api-burst", 10.0, `QPS burst limit when making requests to Kubernetes apiserver`)
+	flag.Float64Var(&kubeApiQps, "kube-api-qps", 5.0,
+		`QPS limit when making requests to Kubernetes apiserver`)
+	flag.IntVar(&kubeApiBurst, "kube-api-burst", 10.0,
+		`QPS burst limit when making requests to Kubernetes apiserver`)
 	flag.StringVar(&masterUrl, "master", "", `K8s master url.`)
 	flag.StringVar(&kubeconfigPath, "kubeconfig", "", `K8s config file path.`)
 	initEnv()
@@ -75,7 +77,8 @@ func main() {
 	config := createKubeConfig(float32(kubeApiQps), kubeApiBurst)
 	kubeClient := kubernetes.NewForConfigOrDie(config)
 	carrierClient := versioned.NewForConfigOrDie(config)
-	factory := externalversions.NewFilteredSharedInformerFactory(carrierClient, 0, podNamespaceEnv, func(opts *metav1.ListOptions) {
+	factory := externalversions.NewFilteredSharedInformerFactory(carrierClient, 0,
+		podNamespaceEnv, func(opts *metav1.ListOptions) {
 		selcetor := fields.OneTermEqualSelector("metadata.name", gameServerNameEnv)
 		opts.FieldSelector = selcetor.String()
 	})
