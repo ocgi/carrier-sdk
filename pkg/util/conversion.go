@@ -48,45 +48,6 @@ func Convert_Carrier_To_GRPC(gs *carrierv1.GameServer) *sdkapi.GameServer {
 	if meta.DeletionTimestamp != nil {
 		result.ObjectMeta.DeletionTimestamp = meta.DeletionTimestamp.Unix()
 	}
-
-	// loop around and add all the load-balancer ingress
-	lbStatus := status.LoadBalancerStatus
-	if lbStatus != nil {
-		var lbIngress []*sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress
-		for _, i := range lbStatus.Ingress {
-			var lbPorts []*sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort
-			for _, p := range i.Ports {
-				port := &sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort{}
-				if p.ContainerPort != nil && p.ExternalPort != nil {
-					port.ContainerPort = wrappers.Int32(*p.ContainerPort)
-					port.ExternalPort = wrappers.Int32(*p.ExternalPort)
-				}
-				if p.ContainerPortRange != nil {
-					port.ContainerPortRange = &sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort_PortRange{
-						MinPort: p.ContainerPortRange.MinPort,
-						MaxPort: p.ContainerPortRange.MaxPort,
-					}
-				}
-				if p.ExternalPortRange != nil {
-					port.ExternalPortRange = &sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort_PortRange{
-						MinPort: p.ExternalPortRange.MinPort,
-						MaxPort: p.ExternalPortRange.MaxPort,
-					}
-				}
-				port.Protocal = string(p.Protocol)
-				lbPorts = append(lbPorts, port)
-			}
-			ing := &sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress{
-				Ip:    i.IP,
-				Ports: lbPorts,
-			}
-			lbIngress = append(lbIngress, ing)
-		}
-		result.Status.LoadBalancerStatus = &sdkapi.GameServer_Status_LoadBalancerStatus{
-			Ingress: lbIngress,
-		}
-	}
-
 	for _, constraint := range gs.Spec.Constraints {
 		sdkConstraint := &sdkapi.GameServer_Spec_Constraint{
 			Type:    string(constraint.Type),
@@ -101,5 +62,47 @@ func Convert_Carrier_To_GRPC(gs *carrierv1.GameServer) *sdkapi.GameServer {
 		}
 		result.Spec.Constraints = append(result.Spec.Constraints, sdkConstraint)
 	}
+	// loop around and add all the load-balancer ingress
+	lbStatus := status.LoadBalancerStatus
+	makeStatus(lbStatus, result)
 	return result
+}
+
+func makeStatus(lbStatus *carrierv1.LoadBalancerStatus, sdkGS *sdkapi.GameServer) {
+	if lbStatus == nil {
+		return
+	}
+	var lbIngress []*sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress
+	for _, i := range lbStatus.Ingress {
+		var lbPorts []*sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort
+		var cPortRange, ePortRange sdkapi.
+		GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort_PortRange
+		for _, p := range i.Ports {
+			port := &sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort{}
+			if p.ContainerPort != nil && p.ExternalPort != nil {
+				port.ContainerPort = wrappers.Int32(*p.ContainerPort)
+				port.ExternalPort = wrappers.Int32(*p.ExternalPort)
+			}
+			if p.ContainerPortRange != nil {
+				cPortRange.MaxPort = p.ContainerPortRange.MaxPort
+				cPortRange.MinPort = p.ContainerPortRange.MinPort
+				port.ContainerPortRange = &cPortRange
+			}
+			if p.ExternalPortRange != nil {
+				ePortRange.MaxPort = p.ExternalPortRange.MaxPort
+				ePortRange.MinPort = p.ExternalPortRange.MinPort
+				port.ExternalPortRange = &ePortRange
+			}
+			port.Protocal = string(p.Protocol)
+			lbPorts = append(lbPorts, port)
+		}
+		ing := &sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress{
+			Ip:    i.IP,
+			Ports: lbPorts,
+		}
+		lbIngress = append(lbIngress, ing)
+	}
+	sdkGS.Status.LoadBalancerStatus = &sdkapi.GameServer_Status_LoadBalancerStatus{
+		Ingress: lbIngress,
+	}
 }

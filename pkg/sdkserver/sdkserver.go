@@ -75,8 +75,8 @@ type SDKServer struct {
 
 // NewSDKServer creates a SDKServer that sets up an
 // InClusterConfig for Kubernetes
-func NewSDKServer(gameServerName, namespace string, kubeClient kubernetes.Interface,
-	carrierClient versioned.Interface, lister listerv1.GameServerLister, sendCh chan *sdkapi.GameServer) (*SDKServer, error) {
+func NewSDKServer(gameServerName, namespace string, kubeClient kubernetes.Interface, carrierClient versioned.Interface,
+	lister listerv1.GameServerLister, sendCh chan *sdkapi.GameServer) (*SDKServer, error) {
 	mux := http.NewServeMux()
 	s := &SDKServer{
 		gameServerName: gameServerName,
@@ -172,7 +172,8 @@ func (s *SDKServer) updateCondition(req *util.SetRequest) error {
 
 	gs, err = gameServers.Patch(gs.Name, types.MergePatchType, patch, "status")
 	if err != nil {
-		return errors.Wrapf(err, "failed to update GameServer %s/%s condition: %v", s.namespace, s.gameServerName, err)
+		return errors.Wrapf(err, "failed to update GameServer %s/%s condition: %v",
+			s.namespace, s.gameServerName, err)
 	}
 
 	message := fmt.Sprintf("Condition changed: %v to %v", condition.Type, condition.Status)

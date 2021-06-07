@@ -35,8 +35,10 @@ import (
 var defaultTimeout = 15 * time.Second
 var defaultPeriodTime = 5 * time.Second
 
+// Options defines a func whose parameter is WebhookReview
 type Options func(*webhook.WebhookReview)
 
+// WebhookClient defines webhook client to query custom servers
 type WebhookClient struct {
 	config *carrierv1.Configurations
 	name   string
@@ -44,6 +46,7 @@ type WebhookClient struct {
 	client http.Client
 }
 
+// NewWebhookClient creates a new client
 func NewWebhookClient(config *carrierv1.Configurations, name string) *WebhookClient {
 	timeout := defaultTimeout
 	period := defaultPeriodTime
@@ -66,6 +69,7 @@ func NewWebhookClient(config *carrierv1.Configurations, name string) *WebhookCli
 	}
 }
 
+// Request send request to the custom webhook
 func (s *WebhookClient) Request(gs *carrierv1.GameServer, options ...Options) (*webhook.WebhookResponse, error) {
 	u, err := s.buildURLFromWebhookPolicy()
 	if err != nil {
@@ -121,10 +125,12 @@ func (s *WebhookClient) Request(gs *carrierv1.GameServer, options ...Options) (*
 	return newWebhookReview.Response, nil
 }
 
+// Check checks the response
 func (s *WebhookClient) Check(gs *carrierv1.GameServer) (*webhook.WebhookResponse, error) {
 	return s.Request(gs)
 }
 
+// Push informs the webhook about constraints.
 func (s *WebhookClient) Push(gs *carrierv1.GameServer) (*webhook.WebhookResponse, error) {
 	return s.Request(gs, func(review *webhook.WebhookReview) {
 		review.Request.Constraints = convertConstraints(gs.Spec.Constraints)

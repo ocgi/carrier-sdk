@@ -56,7 +56,8 @@ func SetupSignalHandler() <-chan struct{} {
 	return stop
 }
 
-func newGameServerCondition(condType carrierv1.GameServerConditionType, status carrierv1.ConditionStatus) *carrierv1.GameServerCondition {
+func newGameServerCondition(condType carrierv1.GameServerConditionType,
+	status carrierv1.ConditionStatus) *carrierv1.GameServerCondition {
 	return &carrierv1.GameServerCondition{
 		Type:               condType,
 		Status:             status,
@@ -94,7 +95,8 @@ func SetRequestToGameServerCondition(req SetRequest) (*carrierv1.GameServerCondi
 }
 
 // GetGameServerCondition returns the condition with the provided type.
-func GetGameServerCondition(status carrierv1.GameServerStatus, condType carrierv1.GameServerConditionType) *carrierv1.GameServerCondition {
+func GetGameServerCondition(status carrierv1.GameServerStatus,
+	condType carrierv1.GameServerConditionType) *carrierv1.GameServerCondition {
 	for i := range status.Conditions {
 		c := status.Conditions[i]
 		if c.Type == condType {
@@ -120,7 +122,8 @@ func SetGameServerCondition(status *carrierv1.GameServerStatus, condition carrie
 }
 
 // filterOutCondition returns a new slice of GameServer conditions without conditions with the provided type.
-func filterOutCondition(conditions []carrierv1.GameServerCondition, condType carrierv1.GameServerConditionType) []carrierv1.GameServerCondition {
+func filterOutCondition(conditions []carrierv1.GameServerCondition,
+	condType carrierv1.GameServerConditionType) []carrierv1.GameServerCondition {
 	var newConditions []carrierv1.GameServerCondition
 	for _, c := range conditions {
 		if c.Type == condType {
@@ -131,6 +134,7 @@ func filterOutCondition(conditions []carrierv1.GameServerCondition, condType car
 	return newConditions
 }
 
+// GetWebhookConfigName returns webhook name according to annotations.
 func GetWebhookConfigName(gs *carrierv1.GameServer) string {
 	if gs == nil {
 		return ""
@@ -141,6 +145,7 @@ func GetWebhookConfigName(gs *carrierv1.GameServer) string {
 	return gs.Annotations[WebhookAnn]
 }
 
+// Bool2Str converts bool to string
 func Bool2Str(state bool) string {
 	switch state {
 	case true:
@@ -151,6 +156,7 @@ func Bool2Str(state bool) string {
 	return "False"
 }
 
+// GetContainer returns the container name
 func GetContainer(spec *corev1.PodSpec) *corev1.Container {
 	for _, container := range spec.Containers {
 		if container.Name != "server" {

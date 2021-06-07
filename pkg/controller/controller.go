@@ -81,7 +81,8 @@ func NewController(
 
 	eventBroadcaster := record.NewBroadcaster()
 	eventBroadcaster.StartLogging(klog.Infof)
-	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: kubeClient.CoreV1().Events("")})
+	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface:
+		kubeClient.CoreV1().Events("")})
 	c.recorder = eventBroadcaster.NewRecorder(s, corev1.EventSource{Component: "gameserver-controller"})
 
 	gameServerInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
@@ -90,6 +91,8 @@ func NewController(
 	return c
 }
 
+// SetNotifyFunc set the notification func name.
+// This should be called when notify func is ready.
 func (c *Controller) SetNotifyFunc(setCondition f) {
 	c.setCondition = setCondition
 }
@@ -102,7 +105,7 @@ func (c *Controller) notify(oldObj, newObj interface{}) {
 
 	old := oldObj.(*carrierv1alpha1.GameServer)
 	gs := newObj.(*carrierv1alpha1.GameServer)
-	// // inplace update
+	// inplace update
 	constraintChanged := !reflect.DeepEqual(old.Spec.Constraints, gs.Spec.Constraints) && len(gs.Spec.Constraints) != 0
 	klog.V(5).Infof("Constraints exist: %v", constraintChanged)
 	oldContainer := util.GetContainer(&old.Spec.Template.Spec)
@@ -126,6 +129,7 @@ func (c *Controller) notify(oldObj, newObj interface{}) {
 	c.sendChan <- util.Convert_Carrier_To_GRPC(gs)
 }
 
+// Run starts the controller.
 func (c *Controller) Run(stop <-chan struct{}) error {
 	gs, err := c.gameServerLister.GameServers(c.namespace).Get(c.name)
 	if err != nil {
@@ -141,7 +145,8 @@ func (c *Controller) Run(stop <-chan struct{}) error {
 	return nil
 }
 
-func startHookConstraintNotify(ctx context.Context, gs *carrierv1alpha1.GameServer, cfgs []carrierv1alpha1.Configurations, fun f) {
+func startHookConstraintNotify(ctx context.Context, gs *carrierv1alpha1.GameServer,
+	cfgs []carrierv1alpha1.Configurations, fun f) {
 	var wg sync.WaitGroup
 	for _, cfg := range cfgs {
 		if cfg.Type == nil || *cfg.Type != util.ConstraintWebhook {
@@ -185,7 +190,8 @@ func (c *Controller) sendWebhookRequests(gs *carrierv1alpha1.GameServer, fun f) 
 		// webconfig
 		wbName := util.GetWebhookConfigName(gs)
 		if len(wbName) != 0 {
-			wb, err := c.carrierClient.CarrierV1alpha1().WebhookConfigurations(gs.Namespace).Get(wbName, metav1.GetOptions{})
+			wb, err := c.carrierClient.CarrierV1alpha1().
+				WebhookConfigurations(gs.Namespace).Get(wbName, metav1.GetOptions{})
 			if err != nil {
 				return err
 			}
@@ -196,7 +202,8 @@ func (c *Controller) sendWebhookRequests(gs *carrierv1alpha1.GameServer, fun f) 
 	return nil
 }
 
-func startHooks(ctx context.Context, gs *carrierv1alpha1.GameServer, cfgs []carrierv1alpha1.Configurations, hookType string, fun f) {
+func startHooks(ctx context.Context, gs *carrierv1alpha1.GameServer,
+	cfgs []carrierv1alpha1.Configurations, hookType string, fun f) {
 	for i := range cfgs {
 		if cfgs[i].Type == nil {
 			continue
