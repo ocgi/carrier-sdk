@@ -33,6 +33,7 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/klog"
 
+	"github.com/ocgi/carrier-sdk/api/webhook"
 	"github.com/ocgi/carrier-sdk/pkg/util"
 	sdkapi "github.com/ocgi/carrier-sdk/sdks/sdkgo/api/v1alpha1"
 	carrierv1alpha1 "github.com/ocgi/carrier/pkg/apis/carrier/v1alpha1"
@@ -69,6 +70,7 @@ type SDKServer struct {
 	recorder         record.EventRecorder
 	notifyQueue      chan *sdkapi.GameServer
 	stopCh           <-chan struct{}
+	status           string
 
 	sdkapi.UnimplementedSDKServer
 }
@@ -90,6 +92,7 @@ func NewSDKServer(gameServerName, namespace string, kubeClient kubernetes.Interf
 		requestQueue:     make(chan *util.SetRequest, 10),
 		gameServerLister: lister,
 		notifyQueue:      sendCh,
+		status:           webhook.RequestReasonCreated,
 	}
 	scm := scheme.Scheme
 	// Register crd types with the runtime scheme.

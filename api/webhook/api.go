@@ -35,7 +35,14 @@ type WebhookRequest struct {
 	// If anyone of them is `NotInService` and Effective is `True`,
 	// We should react to the constraint.
 	Constraints []Constraint `json:"constraints,omitempty"`
+	// Status defines the GameServer status, Include: Created, InplaceUpdated.
+	Status string `json:"status,omitempty"`
 }
+
+const (
+	RequestReasonCreated        = "Created"
+	RequestReasonInplaceUpdated = "InplaceUpdated"
+)
 
 // WebhookResponse defines the response of webhook server
 type WebhookResponse struct {

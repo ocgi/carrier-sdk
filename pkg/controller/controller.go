@@ -16,6 +16,7 @@ package controller
 
 import (
 	"context"
+	"github.com/ocgi/carrier-sdk/api/webhook"
 	"reflect"
 	"sync"
 
@@ -55,6 +56,7 @@ type Controller struct {
 	ctx                context.Context
 	sendChan           chan *sdkapi.GameServer
 	setCondition       f
+	status             string
 }
 
 // NewController returns a new GameServer crd controller
@@ -73,6 +75,7 @@ func NewController(
 		kubeClient:       kubeClient,
 		carrierClient:    carrierClient,
 		sendChan:         sendChan,
+		status:           webhook.RequestReasonCreated,
 	}
 
 	s := scheme.Scheme
@@ -82,7 +85,7 @@ func NewController(
 	eventBroadcaster := record.NewBroadcaster()
 	eventBroadcaster.StartLogging(klog.Infof)
 	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface:
-		kubeClient.CoreV1().Events("")})
+	kubeClient.CoreV1().Events("")})
 	c.recorder = eventBroadcaster.NewRecorder(s, corev1.EventSource{Component: "gameserver-controller"})
 
 	gameServerInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
@@ -115,6 +118,7 @@ func (c *Controller) notify(oldObj, newObj interface{}) {
 		if c.cancel != nil {
 			c.cancel()
 		}
+		c.status = webhook.RequestReasonInplaceUpdated
 		klog.V(5).Infof("Image changed to %v", newContainer.Image)
 		c.ctx, c.cancel = context.WithCancel(context.Background())
 		if err := c.sendWebhookRequests(gs, c.setCondition); err != nil {
@@ -124,7 +128,8 @@ func (c *Controller) notify(oldObj, newObj interface{}) {
 
 	if constraintChanged && c.webhookConfig != nil {
 		klog.Info("sending game server notification")
-		startHookConstraintNotify(c.ctx, gs, c.webhookConfig.Webhooks, c.setCondition)
+		startHookConstraintNotify(c.ctx, gs, c.webhookConfig.Webhooks, c.status,
+			c.setCondition)
 	}
 	c.sendChan <- util.Convert_Carrier_To_GRPC(gs)
 }
@@ -146,7 +151,7 @@ func (c *Controller) Run(stop <-chan struct{}) error {
 }
 
 func startHookConstraintNotify(ctx context.Context, gs *carrierv1alpha1.GameServer,
-	cfgs []carrierv1alpha1.Configurations, fun f) {
+	cfgs []carrierv1alpha1.Configurations, status string, fun f) {
 	var wg sync.WaitGroup
 	for _, cfg := range cfgs {
 		if cfg.Type == nil || *cfg.Type != util.ConstraintWebhook {
@@ -156,7 +161,7 @@ func startHookConstraintNotify(ctx context.Context, gs *carrierv1alpha1.GameServ
 		// if psuh success, wg Done
 		// if Once, go routine exit; Otherwise, continue notification util context done.
 		go func(cfg carrierv1alpha1.Configurations) {
-			w := client.NewWebhookClient(&cfg, *cfg.Name)
+			w := client.NewWebhookClient(&cfg, *cfg.Name, status)
 			var notified bool
 			err := wait.PollImmediateUntil(w.Period(), func() (bool, error) {
 				_, err := w.Push(gs)
@@ -182,7 +187,7 @@ func startHookConstraintNotify(ctx context.Context, gs *carrierv1alpha1.GameServ
 	}
 	wg.Wait()
 	// wait all notified, then send deletable.
-	startHooks(ctx, gs, cfgs, util.DeletableWebhook, fun)
+	startHooks(ctx, gs, cfgs, util.DeletableWebhook, status, fun)
 }
 
 func (c *Controller) sendWebhookRequests(gs *carrierv1alpha1.GameServer, fun f) error {
@@ -196,14 +201,14 @@ func (c *Controller) sendWebhookRequests(gs *carrierv1alpha1.GameServer, fun f) 
 				return err
 			}
 			c.webhookConfig = wb
-			startHooks(c.ctx, gs, wb.Webhooks, util.ReadinessWebhook, fun)
+			startHooks(c.ctx, gs, wb.Webhooks, util.ReadinessWebhook, c.status, fun)
 		}
 	}
 	return nil
 }
 
 func startHooks(ctx context.Context, gs *carrierv1alpha1.GameServer,
-	cfgs []carrierv1alpha1.Configurations, hookType string, fun f) {
+	cfgs []carrierv1alpha1.Configurations, hookType string, status string, fun f) {
 	for i := range cfgs {
 		if cfgs[i].Type == nil {
 			continue
@@ -213,13 +218,14 @@ func startHooks(ctx context.Context, gs *carrierv1alpha1.GameServer,
 		}
 
 		go func(i int) {
-			startHook(ctx, gs, cfgs[i], fun)
+			startHook(ctx, gs, cfgs[i], status, fun)
 		}(i)
 	}
 }
 
-func startHook(ctx context.Context, gs *carrierv1alpha1.GameServer, cfg carrierv1alpha1.Configurations, fun f) {
-	w := client.NewWebhookClient(&cfg, *cfg.Name)
+func startHook(ctx context.Context, gs *carrierv1alpha1.GameServer, cfg carrierv1alpha1.Configurations, status string,
+	fun f) {
+	w := client.NewWebhookClient(&cfg, *cfg.Name, status)
 	err := wait.PollImmediateUntil(w.Period(), func() (done bool, err error) {
 		res, err := w.Check(gs)
 		if err != nil {

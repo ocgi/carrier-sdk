@@ -44,10 +44,11 @@ type WebhookClient struct {
 	name   string
 	period time.Duration
 	client http.Client
+	status string
 }
 
 // NewWebhookClient creates a new client
-func NewWebhookClient(config *carrierv1.Configurations, name string) *WebhookClient {
+func NewWebhookClient(config *carrierv1.Configurations, name, status string) *WebhookClient {
 	timeout := defaultTimeout
 	period := defaultPeriodTime
 	if config == nil {
@@ -66,6 +67,7 @@ func NewWebhookClient(config *carrierv1.Configurations, name string) *WebhookCli
 			Timeout: timeout,
 		},
 		period: period,
+		status: status,
 	}
 }
 
@@ -81,6 +83,7 @@ func (s *WebhookClient) Request(gs *carrierv1.GameServer, options ...Options) (*
 			UID:       uuid.NewUUID(),
 			Name:      gs.Name,
 			Namespace: gs.Namespace,
+			Status:    s.status,
 		},
 		Response: nil,
 	}
