@@ -3,6 +3,7 @@
 // source: sdk.proto
 // Original file comments:
 // Copyright 2021 The OCGI Authors.
+// Copyright 2018 Google LLC All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -108,9 +109,9 @@ class SDK final {
       #endif
       // Send GameServer details whenever the GameServer is updated
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      virtual void WatchGameServer(::grpc::ClientContext* context, ::carrier::dev::sdk::Empty* request, ::grpc::ClientReadReactor< ::carrier::dev::sdk::GameServer>* reactor) = 0;
+      virtual void WatchGameServer(::grpc::ClientContext* context, const ::carrier::dev::sdk::Empty* request, ::grpc::ClientReadReactor< ::carrier::dev::sdk::GameServer>* reactor) = 0;
       #else
-      virtual void WatchGameServer(::grpc::ClientContext* context, ::carrier::dev::sdk::Empty* request, ::grpc::experimental::ClientReadReactor< ::carrier::dev::sdk::GameServer>* reactor) = 0;
+      virtual void WatchGameServer(::grpc::ClientContext* context, const ::carrier::dev::sdk::Empty* request, ::grpc::experimental::ClientReadReactor< ::carrier::dev::sdk::GameServer>* reactor) = 0;
       #endif
       // Apply a Label to the backing GameServer metadata
       virtual void SetLabel(::grpc::ClientContext* context, const ::carrier::dev::sdk::KeyValue* request, ::carrier::dev::sdk::Empty* response, std::function<void(::grpc::Status)>) = 0;
@@ -156,7 +157,7 @@ class SDK final {
   };
   class Stub final : public StubInterface {
    public:
-    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
     ::grpc::Status GetGameServer(::grpc::ClientContext* context, const ::carrier::dev::sdk::Empty& request, ::carrier::dev::sdk::GameServer* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::carrier::dev::sdk::GameServer>> AsyncGetGameServer(::grpc::ClientContext* context, const ::carrier::dev::sdk::Empty& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::carrier::dev::sdk::GameServer>>(AsyncGetGameServerRaw(context, request, cq));
@@ -204,9 +205,9 @@ class SDK final {
       void GetGameServer(::grpc::ClientContext* context, const ::carrier::dev::sdk::Empty* request, ::carrier::dev::sdk::GameServer* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
       #endif
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      void WatchGameServer(::grpc::ClientContext* context, ::carrier::dev::sdk::Empty* request, ::grpc::ClientReadReactor< ::carrier::dev::sdk::GameServer>* reactor) override;
+      void WatchGameServer(::grpc::ClientContext* context, const ::carrier::dev::sdk::Empty* request, ::grpc::ClientReadReactor< ::carrier::dev::sdk::GameServer>* reactor) override;
       #else
-      void WatchGameServer(::grpc::ClientContext* context, ::carrier::dev::sdk::Empty* request, ::grpc::experimental::ClientReadReactor< ::carrier::dev::sdk::GameServer>* reactor) override;
+      void WatchGameServer(::grpc::ClientContext* context, const ::carrier::dev::sdk::Empty* request, ::grpc::experimental::ClientReadReactor< ::carrier::dev::sdk::GameServer>* reactor) override;
       #endif
       void SetLabel(::grpc::ClientContext* context, const ::carrier::dev::sdk::KeyValue* request, ::carrier::dev::sdk::Empty* response, std::function<void(::grpc::Status)>) override;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL

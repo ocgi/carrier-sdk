@@ -93,7 +93,7 @@ func makeStatus(lbStatus *carrierv1.LoadBalancerStatus, sdkGS *sdkapi.GameServer
 				ePortRange.MinPort = p.ExternalPortRange.MinPort
 				port.ExternalPortRange = &ePortRange
 			}
-			port.Protocal = string(p.Protocol)
+			port.Protocol = string(p.Protocol)
 			lbPorts = append(lbPorts, port)
 		}
 		ing := &sdkapi.GameServer_Status_LoadBalancerStatus_LoadBalancerIngress{

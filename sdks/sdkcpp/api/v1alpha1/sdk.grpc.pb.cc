@@ -33,16 +33,16 @@ static const char* SDK_method_names[] = {
 
 std::unique_ptr< SDK::Stub> SDK::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
   (void)options;
-  std::unique_ptr< SDK::Stub> stub(new SDK::Stub(channel));
+  std::unique_ptr< SDK::Stub> stub(new SDK::Stub(channel, options));
   return stub;
 }
 
-SDK::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
-  : channel_(channel), rpcmethod_GetGameServer_(SDK_method_names[0], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_WatchGameServer_(SDK_method_names[1], ::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
-  , rpcmethod_SetLabel_(SDK_method_names[2], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_SetAnnotation_(SDK_method_names[3], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_SetCondition_(SDK_method_names[4], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+SDK::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
+  : channel_(channel), rpcmethod_GetGameServer_(SDK_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_WatchGameServer_(SDK_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
+  , rpcmethod_SetLabel_(SDK_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SetAnnotation_(SDK_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SetCondition_(SDK_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status SDK::Stub::GetGameServer(::grpc::ClientContext* context, const ::carrier::dev::sdk::Empty& request, ::carrier::dev::sdk::GameServer* response) {
@@ -72,7 +72,7 @@ void SDK::Stub::experimental_async::GetGameServer(::grpc::ClientContext* context
   return ::grpc::internal::ClientReaderFactory< ::carrier::dev::sdk::GameServer>::Create(channel_.get(), rpcmethod_WatchGameServer_, context, request);
 }
 
-void SDK::Stub::experimental_async::WatchGameServer(::grpc::ClientContext* context, ::carrier::dev::sdk::Empty* request, ::grpc::experimental::ClientReadReactor< ::carrier::dev::sdk::GameServer>* reactor) {
+void SDK::Stub::experimental_async::WatchGameServer(::grpc::ClientContext* context, const ::carrier::dev::sdk::Empty* request, ::grpc::experimental::ClientReadReactor< ::carrier::dev::sdk::GameServer>* reactor) {
   ::grpc::internal::ClientCallbackReaderFactory< ::carrier::dev::sdk::GameServer>::Create(stub_->channel_.get(), stub_->rpcmethod_WatchGameServer_, context, request, reactor);
 }
 

@@ -1,4 +1,5 @@
 // Copyright 2021 The OCGI Authors.
+// Copyright 2018 Google LLC All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -553,7 +554,7 @@ type GameServer_Spec_Constraint struct {
 	Type      string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
 	Effective bool   `protobuf:"varint,2,opt,name=effective,proto3" json:"effective,omitempty"`
 	Message   string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
-	// optional deletion timestamp in Epoch format, unit: seconds
+	// optional time added timestamp in Epoch format, unit: seconds
 	TimeAdded int64 `protobuf:"varint,4,opt,name=timeAdded,proto3" json:"timeAdded,omitempty"`
 }
 
@@ -731,7 +732,7 @@ type GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort s
 	ExternalPort       *wrappers.Int32Value                                                                 `protobuf:"bytes,2,opt,name=external_port,json=externalPort,proto3" json:"external_port,omitempty"`
 	ContainerPortRange *GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort_PortRange `protobuf:"bytes,3,opt,name=container_port_range,json=containerPortRange,proto3" json:"container_port_range,omitempty"`
 	ExternalPortRange  *GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort_PortRange `protobuf:"bytes,4,opt,name=external_port_range,json=externalPortRange,proto3" json:"external_port_range,omitempty"`
-	Protocal           string                                                                               `protobuf:"bytes,5,opt,name=protocal,proto3" json:"protocal,omitempty"`
+	Protocol           string                                                                               `protobuf:"bytes,5,opt,name=protocol,proto3" json:"protocol,omitempty"`
 }
 
 func (x *GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort) Reset() {
@@ -794,9 +795,9 @@ func (x *GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPo
 	return nil
 }
 
-func (x *GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort) GetProtocal() string {
+func (x *GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort) GetProtocol() string {
 	if x != nil {
-		return x.Protocal
+		return x.Protocol
 	}
 	return ""
 }
@@ -997,8 +998,8 @@ var file_sdk_proto_rawDesc = []byte{
 	0x61, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x50, 0x6f, 0x72, 0x74, 0x2e, 0x50,
 	0x6f, 0x72, 0x74, 0x52, 0x61, 0x6e, 0x67, 0x65, 0x52, 0x11, 0x65, 0x78, 0x74, 0x65, 0x72, 0x6e,
 	0x61, 0x6c, 0x50, 0x6f, 0x72, 0x74, 0x52, 0x61, 0x6e, 0x67, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x63, 0x61, 0x6c, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x63, 0x61, 0x6c, 0x1a, 0x3f, 0x0a, 0x09, 0x50, 0x6f, 0x72, 0x74, 0x52,
+	0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x1a, 0x3f, 0x0a, 0x09, 0x50, 0x6f, 0x72, 0x74, 0x52,
 	0x61, 0x6e, 0x67, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x69, 0x6e, 0x50, 0x6f, 0x72, 0x74, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x6d, 0x69, 0x6e, 0x50, 0x6f, 0x72, 0x74, 0x12, 0x18,
 	0x0a, 0x07, 0x6d, 0x61, 0x78, 0x50, 0x6f, 0x72, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52,

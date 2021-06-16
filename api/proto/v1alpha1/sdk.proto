@@ -136,7 +136,7 @@ message GameServer {
                     google.protobuf.Int32Value external_port = 2;
                     PortRange container_port_range = 3;
                     PortRange external_port_range = 4;
-                    string protocal = 5;
+                    string protocol = 5;
                     message PortRange {
                         int32 minPort = 1;
                         int32 maxPort = 2;
