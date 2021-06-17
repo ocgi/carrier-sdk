@@ -22,6 +22,7 @@ import (
 	"net/http"
 	"net/http/pprof"
 	"sync"
+	"time"
 
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
@@ -131,17 +132,22 @@ func (s *SDKServer) syncGameServer(obj interface{}) error {
 		// we don't want the obj be reprocessed, so return nil
 		return nil
 	}
-
-	switch req.Type {
-	case util.SetCondition:
-		return s.updateCondition(req)
-	case util.SetLabel:
-		return s.updateLabels(req)
-	case util.SetAnnotation:
-		return s.updateAnnotations(req)
+	err := util.WithExponentialBackoff(100*time.Millisecond, func() error {
+		switch req.Type {
+		case util.SetCondition:
+			return s.updateCondition(req)
+		case util.SetLabel:
+			return s.updateLabels(req)
+		case util.SetAnnotation:
+			return s.updateAnnotations(req)
+		}
+		return nil
+	})
+	if err == nil {
+		return nil
 	}
 
-	return errors.Errorf("could not sync game server set request: %v", *req)
+	return errors.Errorf("could not sync game server set request: %v, err: %v", *req, err)
 }
 
 func (s *SDKServer) gameServer() (*carrierv1alpha1.GameServer, error) {

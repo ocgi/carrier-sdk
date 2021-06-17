@@ -18,11 +18,13 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	carrierv1 "github.com/ocgi/carrier/pkg/apis/carrier/v1alpha1"
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/wait"
 )
 
 const (
@@ -165,4 +167,23 @@ func GetContainer(spec *corev1.PodSpec) *corev1.Container {
 		return &container
 	}
 	return nil
+}
+
+// WithExponentialBackoff will retry webhookFn up to 5 times with exponentially increasing backoff when
+// it returns an error。
+func WithExponentialBackoff(initialBackoff time.Duration, webhookFn func() error) error {
+	backoff := wait.Backoff{
+		Duration: initialBackoff,
+		Factor:   1.5,
+		Jitter:   0,
+		Steps:    5,
+	}
+
+	return wait.ExponentialBackoff(backoff, func() (bool, error) {
+		err := webhookFn()
+		if err != nil {
+			return false, nil
+		}
+		return true, nil
+	})
 }
