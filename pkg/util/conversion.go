@@ -64,11 +64,12 @@ func Convert_Carrier_To_GRPC(gs *carrierv1.GameServer) *sdkapi.GameServer {
 	}
 	// loop around and add all the load-balancer ingress
 	lbStatus := status.LoadBalancerStatus
-	makeStatus(lbStatus, result)
+	makeLBStatus(lbStatus, result)
+	makeConditionStatus(gs, result)
 	return result
 }
 
-func makeStatus(lbStatus *carrierv1.LoadBalancerStatus, sdkGS *sdkapi.GameServer) {
+func makeLBStatus(lbStatus *carrierv1.LoadBalancerStatus, sdkGS *sdkapi.GameServer) {
 	if lbStatus == nil {
 		return
 	}
@@ -105,4 +106,19 @@ func makeStatus(lbStatus *carrierv1.LoadBalancerStatus, sdkGS *sdkapi.GameServer
 	sdkGS.Status.LoadBalancerStatus = &sdkapi.GameServer_Status_LoadBalancerStatus{
 		Ingress: lbIngress,
 	}
+}
+
+func makeConditionStatus(gs *carrierv1.GameServer, sdkGS *sdkapi.GameServer) {
+	var conditions []*sdkapi.GameServer_Status_GameServerCondition
+	for _, condition := range gs.Status.Conditions {
+		c := &sdkapi.GameServer_Status_GameServerCondition{
+			Type:               string(condition.Type),
+			Status:             string(condition.Status),
+			LastProbeTime:      condition.LastProbeTime.Unix(),
+			LastTransitionTime: condition.LastTransitionTime.Unix(),
+			Message:            condition.Message,
+		}
+		conditions = append(conditions, c)
+	}
+	sdkGS.Status.Conditions = conditions
 }

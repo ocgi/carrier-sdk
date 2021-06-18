@@ -26,14 +26,14 @@ import "google/protobuf/wrappers.proto";
 service SDK {
 
     // Retrieve the current GameServer data
-    rpc GetGameServer (Empty) returns (GameServer) {
+    rpc GetGameServer(Empty) returns (GameServer) {
         option (google.api.http) = {
             get: "/gameserver"
         };
     }
 
     // Send GameServer details whenever the GameServer is updated
-    rpc WatchGameServer (Empty) returns (stream GameServer) {
+    rpc WatchGameServer(Empty) returns (stream GameServer) {
         option (google.api.http) = {
             get: "/watch/gameserver"
         };
@@ -145,9 +145,18 @@ message GameServer {
             }
         }
 
+        message GameServerCondition {
+            string type = 1;
+            string status = 2;
+            int64 last_probe_time = 3;
+            int64 last_transition_time = 4;
+            string message = 5;
+        }
+
         string state = 1;
         string address = 2;
         string nodeName = 3;
         LoadBalancerStatus load_balancer_status = 4;
+        repeated GameServerCondition conditions = 5;
     }
 }
