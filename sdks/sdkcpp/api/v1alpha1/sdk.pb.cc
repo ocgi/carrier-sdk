@@ -425,6 +425,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_sdk_2eproto::offsets[] PROTOBU
   PROTOBUF_FIELD_OFFSET(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort, container_port_range_),
   PROTOBUF_FIELD_OFFSET(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort, external_port_range_),
   PROTOBUF_FIELD_OFFSET(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort, protocol_),
+  PROTOBUF_FIELD_OFFSET(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort, name_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus_LoadBalancerIngress, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -479,11 +480,11 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 65, -1, sizeof(::carrier::dev::sdk::GameServer_Spec)},
   { 73, -1, sizeof(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort_PortRange)},
   { 80, -1, sizeof(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort)},
-  { 90, -1, sizeof(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus_LoadBalancerIngress)},
-  { 97, -1, sizeof(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus)},
-  { 103, -1, sizeof(::carrier::dev::sdk::GameServer_Status_GameServerCondition)},
-  { 113, -1, sizeof(::carrier::dev::sdk::GameServer_Status)},
-  { 123, -1, sizeof(::carrier::dev::sdk::GameServer)},
+  { 91, -1, sizeof(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus_LoadBalancerIngress)},
+  { 98, -1, sizeof(::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus)},
+  { 104, -1, sizeof(::carrier::dev::sdk::GameServer_Status_GameServerCondition)},
+  { 114, -1, sizeof(::carrier::dev::sdk::GameServer_Status)},
+  { 124, -1, sizeof(::carrier::dev::sdk::GameServer)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -510,7 +511,7 @@ const char descriptor_table_protodef_sdk_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "/annotations.proto\032\036google/protobuf/wrap"
   "pers.proto\"\007\n\005Empty\"\032\n\tBoolValue\022\r\n\005valu"
   "e\030\001 \001(\010\"&\n\010KeyValue\022\013\n\003key\030\001 \001(\t\022\r\n\005valu"
-  "e\030\002 \001(\t\"\033\n\010Duration\022\017\n\007seconds\030\001 \001(\003\"\272\016\n"
+  "e\030\002 \001(\t\"\033\n\010Duration\022\017\n\007seconds\030\001 \001(\003\"\310\016\n"
   "\nGameServer\022;\n\013object_meta\030\001 \001(\0132&.carri"
   "er.dev.sdk.GameServer.ObjectMeta\022.\n\004spec"
   "\030\002 \001(\0132 .carrier.dev.sdk.GameServer.Spec"
@@ -530,19 +531,19 @@ const char descriptor_table_protodef_sdk_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "Spec.Constraint\022\027\n\017readiness_gates\030\002 \003(\t"
   "\022\027\n\017deletable_gates\030\003 \003(\t\032Q\n\nConstraint\022"
   "\014\n\004type\030\001 \001(\t\022\021\n\teffective\030\002 \001(\010\022\017\n\007mess"
-  "age\030\003 \001(\t\022\021\n\ttimeAdded\030\004 \001(\003\032\242\010\n\006Status\022"
+  "age\030\003 \001(\t\022\021\n\ttimeAdded\030\004 \001(\003\032\260\010\n\006Status\022"
   "\r\n\005state\030\001 \001(\t\022\017\n\007address\030\002 \001(\t\022\020\n\010nodeN"
   "ame\030\003 \001(\t\022S\n\024load_balancer_status\030\004 \001(\0132"
   "5.carrier.dev.sdk.GameServer.Status.Load"
   "BalancerStatus\022J\n\nconditions\030\005 \003(\01326.car"
   "rier.dev.sdk.GameServer.Status.GameServe"
-  "rCondition\032\307\005\n\022LoadBalancerStatus\022Z\n\007ing"
+  "rCondition\032\325\005\n\022LoadBalancerStatus\022Z\n\007ing"
   "ress\030\001 \003(\0132I.carrier.dev.sdk.GameServer."
   "Status.LoadBalancerStatus.LoadBalancerIn"
-  "gress\032\324\004\n\023LoadBalancerIngress\022\n\n\002ip\030\001 \001("
+  "gress\032\342\004\n\023LoadBalancerIngress\022\n\n\002ip\030\001 \001("
   "\t\022i\n\005ports\030\002 \003(\0132Z.carrier.dev.sdk.GameS"
   "erver.Status.LoadBalancerStatus.LoadBala"
-  "ncerIngress.LoadBalancerPort\032\305\003\n\020LoadBal"
+  "ncerIngress.LoadBalancerPort\032\323\003\n\020LoadBal"
   "ancerPort\0223\n\016container_port\030\001 \001(\0132\033.goog"
   "le.protobuf.Int32Value\0222\n\rexternal_port\030"
   "\002 \001(\0132\033.google.protobuf.Int32Value\022\202\001\n\024c"
@@ -552,24 +553,25 @@ const char descriptor_table_protodef_sdk_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "rtRange\022\201\001\n\023external_port_range\030\004 \001(\0132d."
   "carrier.dev.sdk.GameServer.Status.LoadBa"
   "lancerStatus.LoadBalancerIngress.LoadBal"
-  "ancerPort.PortRange\022\020\n\010protocol\030\005 \001(\t\032-\n"
-  "\tPortRange\022\017\n\007minPort\030\001 \001(\005\022\017\n\007maxPort\030\002"
-  " \001(\005\032{\n\023GameServerCondition\022\014\n\004type\030\001 \001("
-  "\t\022\016\n\006status\030\002 \001(\t\022\027\n\017last_probe_time\030\003 \001"
-  "(\003\022\034\n\024last_transition_time\030\004 \001(\003\022\017\n\007mess"
-  "age\030\005 \001(\t2\337\003\n\003SDK\022Y\n\rGetGameServer\022\026.car"
-  "rier.dev.sdk.Empty\032\033.carrier.dev.sdk.Gam"
-  "eServer\"\023\202\323\344\223\002\r\022\013/gameserver\022c\n\017WatchGam"
-  "eServer\022\026.carrier.dev.sdk.Empty\032\033.carrie"
-  "r.dev.sdk.GameServer\"\031\202\323\344\223\002\023\022\021/watch/gam"
-  "eserver0\001\022Y\n\010SetLabel\022\031.carrier.dev.sdk."
-  "KeyValue\032\026.carrier.dev.sdk.Empty\"\032\202\323\344\223\002\024"
-  "\032\017/metadata/label:\001*\022c\n\rSetAnnotation\022\031."
-  "carrier.dev.sdk.KeyValue\032\026.carrier.dev.s"
-  "dk.Empty\"\037\202\323\344\223\002\031\032\024/metadata/annotation:\001"
-  "*\022X\n\014SetCondition\022\031.carrier.dev.sdk.KeyV"
-  "alue\032\026.carrier.dev.sdk.Empty\"\025\202\323\344\223\002\017\032\n/c"
-  "ondition:\001*B\007Z\005.;apib\006proto3"
+  "ancerPort.PortRange\022\020\n\010protocol\030\005 \001(\t\022\014\n"
+  "\004name\030\006 \001(\t\032-\n\tPortRange\022\017\n\007minPort\030\001 \001("
+  "\005\022\017\n\007maxPort\030\002 \001(\005\032{\n\023GameServerConditio"
+  "n\022\014\n\004type\030\001 \001(\t\022\016\n\006status\030\002 \001(\t\022\027\n\017last_"
+  "probe_time\030\003 \001(\003\022\034\n\024last_transition_time"
+  "\030\004 \001(\003\022\017\n\007message\030\005 \001(\t2\337\003\n\003SDK\022Y\n\rGetGa"
+  "meServer\022\026.carrier.dev.sdk.Empty\032\033.carri"
+  "er.dev.sdk.GameServer\"\023\202\323\344\223\002\r\022\013/gameserv"
+  "er\022c\n\017WatchGameServer\022\026.carrier.dev.sdk."
+  "Empty\032\033.carrier.dev.sdk.GameServer\"\031\202\323\344\223"
+  "\002\023\022\021/watch/gameserver0\001\022Y\n\010SetLabel\022\031.ca"
+  "rrier.dev.sdk.KeyValue\032\026.carrier.dev.sdk"
+  ".Empty\"\032\202\323\344\223\002\024\032\017/metadata/label:\001*\022c\n\rSe"
+  "tAnnotation\022\031.carrier.dev.sdk.KeyValue\032\026"
+  ".carrier.dev.sdk.Empty\"\037\202\323\344\223\002\031\032\024/metadat"
+  "a/annotation:\001*\022X\n\014SetCondition\022\031.carrie"
+  "r.dev.sdk.KeyValue\032\026.carrier.dev.sdk.Emp"
+  "ty\"\025\202\323\344\223\002\017\032\n/condition:\001*B\007Z\005.;apib\006prot"
+  "o3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_sdk_2eproto_deps[2] = {
   &::descriptor_table_google_2fapi_2fannotations_2eproto,
@@ -595,7 +597,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_sdk
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_sdk_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_sdk_2eproto = {
-  false, false, descriptor_table_protodef_sdk_2eproto, "sdk.proto", 2548,
+  false, false, descriptor_table_protodef_sdk_2eproto, "sdk.proto", 2562,
   &descriptor_table_sdk_2eproto_once, descriptor_table_sdk_2eproto_sccs, descriptor_table_sdk_2eproto_deps, 16, 2,
   schemas, file_default_instances, TableStruct_sdk_2eproto::offsets,
   file_level_metadata_sdk_2eproto, 16, file_level_enum_descriptors_sdk_2eproto, file_level_service_descriptors_sdk_2eproto,
@@ -2870,6 +2872,11 @@ GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::GameS
     protocol_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from._internal_protocol(),
       GetArena());
   }
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_name().empty()) {
+    name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from._internal_name(),
+      GetArena());
+  }
   if (from._internal_has_container_port()) {
     container_port_ = new PROTOBUF_NAMESPACE_ID::Int32Value(*from.container_port_);
   } else {
@@ -2896,6 +2903,7 @@ GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::GameS
 void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort_sdk_2eproto.base);
   protocol_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&container_port_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&external_port_range_) -
       reinterpret_cast<char*>(&container_port_)) + sizeof(external_port_range_));
@@ -2910,6 +2918,7 @@ GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::~Game
 void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::SharedDtor() {
   GOOGLE_DCHECK(GetArena() == nullptr);
   protocol_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete container_port_;
   if (this != internal_default_instance()) delete external_port_;
   if (this != internal_default_instance()) delete container_port_range_;
@@ -2938,6 +2947,7 @@ void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::
   (void) cached_has_bits;
 
   protocol_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  name_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   if (GetArena() == nullptr && container_port_ != nullptr) {
     delete container_port_;
   }
@@ -2999,6 +3009,15 @@ const char* GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalance
           auto str = _internal_mutable_protocol();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.protocol"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string name = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
+          auto str = _internal_mutable_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.name"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -3072,6 +3091,16 @@ failure:
         5, this->_internal_protocol(), target);
   }
 
+  // string name = 6;
+  if (this->name().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.name");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_name(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3093,6 +3122,13 @@ size_t GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_protocol());
+  }
+
+  // string name = 6;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_name());
   }
 
   // .google.protobuf.Int32Value container_port = 1;
@@ -3157,6 +3193,9 @@ void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::
   if (from.protocol().size() > 0) {
     _internal_set_protocol(from._internal_protocol());
   }
+  if (from.name().size() > 0) {
+    _internal_set_name(from._internal_name());
+  }
   if (from.has_container_port()) {
     _internal_mutable_container_port()->PROTOBUF_NAMESPACE_ID::Int32Value::MergeFrom(from._internal_container_port());
   }
@@ -3193,6 +3232,7 @@ void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   protocol_.Swap(&other->protocol_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort, external_port_range_)
       + sizeof(GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::external_port_range_)

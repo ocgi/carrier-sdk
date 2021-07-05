@@ -1693,6 +1693,7 @@ class GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort 
 
   enum : int {
     kProtocolFieldNumber = 5,
+    kNameFieldNumber = 6,
     kContainerPortFieldNumber = 1,
     kExternalPortFieldNumber = 2,
     kContainerPortRangeFieldNumber = 3,
@@ -1712,6 +1713,22 @@ class GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort 
   const std::string& _internal_protocol() const;
   void _internal_set_protocol(const std::string& value);
   std::string* _internal_mutable_protocol();
+  public:
+
+  // string name = 6;
+  void clear_name();
+  const std::string& name() const;
+  void set_name(const std::string& value);
+  void set_name(std::string&& value);
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  std::string* mutable_name();
+  std::string* release_name();
+  void set_allocated_name(std::string* name);
+  private:
+  const std::string& _internal_name() const;
+  void _internal_set_name(const std::string& value);
+  std::string* _internal_mutable_name();
   public:
 
   // .google.protobuf.Int32Value container_port = 1;
@@ -1794,6 +1811,7 @@ class GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort 
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr protocol_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   PROTOBUF_NAMESPACE_ID::Int32Value* container_port_;
   PROTOBUF_NAMESPACE_ID::Int32Value* external_port_;
   ::carrier::dev::sdk::GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort_PortRange* container_port_range_;
@@ -4078,6 +4096,68 @@ inline void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalance
   protocol_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), protocol,
       GetArena());
   // @@protoc_insertion_point(field_set_allocated:carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.protocol)
+}
+
+// string name = 6;
+inline void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::clear_name() {
+  name_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::name() const {
+  // @@protoc_insertion_point(field_get:carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.name)
+  return _internal_name();
+}
+inline void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::set_name(const std::string& value) {
+  _internal_set_name(value);
+  // @@protoc_insertion_point(field_set:carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.name)
+}
+inline std::string* GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::mutable_name() {
+  // @@protoc_insertion_point(field_mutable:carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.name)
+  return _internal_mutable_name();
+}
+inline const std::string& GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::_internal_name() const {
+  return name_.Get();
+}
+inline void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::_internal_set_name(const std::string& value) {
+  
+  name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::set_name(std::string&& value) {
+  
+  name_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.name)
+}
+inline void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::set_name(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.name)
+}
+inline void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::set_name(const char* value,
+    size_t size) {
+  
+  name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.name)
+}
+inline std::string* GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::_internal_mutable_name() {
+  
+  return name_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::release_name() {
+  // @@protoc_insertion_point(field_release:carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.name)
+  return name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void GameServer_Status_LoadBalancerStatus_LoadBalancerIngress_LoadBalancerPort::set_allocated_name(std::string* name) {
+  if (name != nullptr) {
+    
+  } else {
+    
+  }
+  name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:carrier.dev.sdk.GameServer.Status.LoadBalancerStatus.LoadBalancerIngress.LoadBalancerPort.name)
 }
 
 // -------------------------------------------------------------------

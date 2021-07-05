@@ -137,6 +137,7 @@ message GameServer {
                     PortRange container_port_range = 3;
                     PortRange external_port_range = 4;
                     string protocol = 5;
+                    string name = 6;
                     message PortRange {
                         int32 minPort = 1;
                         int32 maxPort = 2;
