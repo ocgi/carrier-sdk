@@ -84,8 +84,7 @@ func NewController(
 
 	eventBroadcaster := record.NewBroadcaster()
 	eventBroadcaster.StartLogging(klog.Infof)
-	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface:
-	kubeClient.CoreV1().Events("")})
+	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: kubeClient.CoreV1().Events("")})
 	c.recorder = eventBroadcaster.NewRecorder(s, corev1.EventSource{Component: "gameserver-controller"})
 
 	gameServerInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
@@ -196,7 +195,7 @@ func (c *Controller) sendWebhookRequests(gs *carrierv1alpha1.GameServer, fun f) 
 		wbName := util.GetWebhookConfigName(gs)
 		if len(wbName) != 0 {
 			wb, err := c.carrierClient.CarrierV1alpha1().
-				WebhookConfigurations(gs.Namespace).Get(wbName, metav1.GetOptions{})
+				WebhookConfigurations(gs.Namespace).Get(context.TODO(), wbName, metav1.GetOptions{})
 			if err != nil {
 				return err
 			}

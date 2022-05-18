@@ -19,6 +19,7 @@ package sdkserver
 import (
 	"context"
 	"fmt"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"net/http"
 	"net/http/pprof"
 	"sync"
@@ -179,7 +180,7 @@ func (s *SDKServer) updateCondition(req *util.SetRequest) error {
 		return err
 	}
 
-	gs, err = gameServers.Patch(gs.Name, types.MergePatchType, patch, "status")
+	gs, err = gameServers.Patch(context.TODO(), gs.Name, types.MergePatchType, patch, v1.PatchOptions{}, "status")
 	if err != nil {
 		return errors.Wrapf(err, "failed to update GameServer %s/%s condition: %v",
 			s.namespace, s.gameServerName, err)
@@ -218,7 +219,7 @@ func (s *SDKServer) updateLabels(req *util.SetRequest) error {
 		return err
 	}
 
-	_, err = s.client.GameServers(s.namespace).Patch(gs.Name, types.MergePatchType, patch)
+	_, err = s.client.GameServers(s.namespace).Patch(context.TODO(), gs.Name, types.MergePatchType, patch, v1.PatchOptions{})
 	return err
 }
 
@@ -248,7 +249,7 @@ func (s *SDKServer) updateAnnotations(req *util.SetRequest) error {
 		return err
 	}
 
-	_, err = s.client.GameServers(s.namespace).Patch(gs.Name, types.MergePatchType, patch)
+	_, err = s.client.GameServers(s.namespace).Patch(context.TODO(), gs.Name, types.MergePatchType, patch, v1.PatchOptions{})
 	return err
 }
 

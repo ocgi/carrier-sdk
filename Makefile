@@ -37,7 +37,7 @@ vet:
 
 sdk-server:
 	@echo "build sdk-server"
-	cd cmd/sdk-server && GOOS=linux go build -o ${OUTDIR}/sdk-server
+	cd cmd/sdk-server && CGO_ENABLED=0 GOOS=linux go build -o ${OUTDIR}/sdk-server
 
 image: sdk-server
 	docker build -t $(REGISTRY_NAME)/carrier-sdkserver:$(VERSION) -f cmd/sdk-server/Dockerfile .
